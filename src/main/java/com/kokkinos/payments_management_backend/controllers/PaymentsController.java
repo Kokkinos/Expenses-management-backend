@@ -3,8 +3,10 @@ package com.kokkinos.payments_management_backend.controllers;
 
 import com.kokkinos.payments_management_backend.dtos.ExpenseDTO;
 import com.kokkinos.payments_management_backend.services.ExpenseService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -40,6 +42,11 @@ public class PaymentsController {
     @PostMapping("/add_expense")
     public void addExpense(@RequestBody ExpenseDTO expenseDTO) {
         expenseService.addExpense(expenseDTO);
+    }
+
+    @GetMapping("csrf_token")
+    public CsrfToken getCsrfToken(HttpServletRequest request) {
+        return (CsrfToken) request.getAttribute("_csrf");
     }
 
 
