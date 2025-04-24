@@ -18,6 +18,9 @@ public class Expense {
     private LocalDate registrationDate;
     private String expenseLabel;
     private double amount;
+    @ManyToOne
+    @JoinColumn(name="user_id")
+    private User user;
 
     public Long getId() {
         return id;
@@ -49,5 +52,13 @@ public class Expense {
 
     public void setAmount(double amount) {
         this.amount = amount;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
