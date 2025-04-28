@@ -7,6 +7,7 @@ import com.kokkinos.payments_management_backend.entities.User;
 import com.kokkinos.payments_management_backend.repositories.ExpenseRepo;
 import com.kokkinos.payments_management_backend.repositories.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cglib.core.Local;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
@@ -89,4 +90,46 @@ public class ExpenseService {
                 })
                 .collect(Collectors.toList());
     }
+
+    public List<ExpenseDTO> getFilteredSeparateExpenses(String filter) {
+        String username = ((UserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+
+        User user = userRepo.findByUsername(username);
+
+        LocalDate today = LocalDate.now();
+        LocalDate tempStartDate = null;
+
+        switch (filter) {
+            case "Last_week" -> tempStartDate = today.minusDays(7);
+            case "Last_month" -> tempStartDate = today.minusDays(30);
+        }
+
+        final LocalDate startDate = tempStartDate;
+
+        List<Expense> expenseList = repo.findByUser(user);
+
+        return expenseList.stream()
+                .filter(expense -> startDate == null || (
+                        (expense.getRegistrationDate().isAfter(startDate) || expense.getRegistrationDate().isEqual(startDate))
+                                && (expense.getRegistrationDate().isBefore(today) || expense.getRegistrationDate().isEqual(today))
+                ))
+                .map(expense -> {
+                    ExpenseDTO dto = new ExpenseDTO();
+                    dto.setLabel(expense.getExpenseLabel());
+                    dto.setAmount(expense.getAmount());
+                    return dto;
+                })
+                .collect(Collectors.toList());
+
+
+//        return repo.findByUser(user).stream()
+//                .map(expense -> {
+//                    ExpenseDTO dto = new ExpenseDTO();
+//                    dto.setLabel(expense.getExpenseLabel());
+//                    dto.setAmount(expense.getAmount());
+//                    return dto;
+//                })
+//                .collect(Collectors.toList());
+    }
+
 }

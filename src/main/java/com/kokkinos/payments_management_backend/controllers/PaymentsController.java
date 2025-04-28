@@ -27,6 +27,7 @@ public class PaymentsController {
     @GetMapping("/separate_expenses")
     public List<ExpenseDTO> getSeparateExpenses() {
         return expenseService.getSeparateExpenses();
+//        return expenseService.getFilteredSeparateExpenses(filter);
     }
 
     @GetMapping("/total")
