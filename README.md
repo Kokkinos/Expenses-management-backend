@@ -10,8 +10,7 @@ This project was crated using Spring Boot 3.4.4 (Java 17)
 
 ## Setup Instructions
 
-1. Clone the repository: **git clone 'backend-repo-url'**,
-**cd 'backend-folder'**
+1. Clone the repository: **git clone https://github.com/Kokkinos/Expenses-management-backend.git**
 
 3. Import the project from your IDE (e.g Intellij, Eclipse)
 4. Configure Database (example: H2, MySQL, PostgreSQL). Update your application.properties
